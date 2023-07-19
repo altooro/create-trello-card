@@ -42,5 +42,8 @@ runs:
         export LIST_ID=${{ inputs.LIST_ID }}
         export PR_NUMBER=${{ inputs.PR_NUMBER }}
         export REPO_NAME=${{ inputs.REPO_NAME }}
+        ls
+        pwd
+        ls ..
         python script.py
       shell: bash
