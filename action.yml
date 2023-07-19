@@ -39,7 +39,7 @@ runs:
     - name: Install requests
       run: pip install requests
       shell: bash
-    - name: Check if there were any merge events in the last 24 hours
+    - name: Create trello card for QA team if needed
       run: |
         export GITHUB_TOKEN=${{ inputs.GITHUB_TOKEN }}
         export TRELLO_API_KEY=${{ inputs.TRELLO_API_KEY }}
