@@ -1,0 +1,46 @@
+name: 'Create trello card'
+description: 'Create card when open feature PR'
+inputs:
+  GITHUB_TOKEN:
+    description: 'Github Token'
+    required: true
+  TRELLO_API_KEY:
+    description: 'Trello API key'
+    required: true
+  TRELLO_TOKEN:
+    description: 'Trello Token'
+    required: true
+  BOARD_ID:
+    description: 'Trello Board ID that will add the card to it'
+    required: true
+  LIST_ID:
+    description: 'Trello List ID that will add the card to it'
+    required: true
+  REPO_NAME:
+    description: 'Repository name'
+    required: true
+  PR_NUMBER:
+    description: 'Pull request number'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup python for automation
+      uses: actions/setup-python@v2
+      with:
+        python-version: "3.9"
+    - name: Install requests
+      run: pip install requests
+      shell: bash
+    - name: Check if there were any merge events in the last 24 hours
+      run: |
+        export GITHUB_TOKEN=${{ inputs.GITHUB_TOKEN }}
+        export TRELLO_API_KEY=${{ inputs.TRELLO_API_KEY }}
+        export TRELLO_TOKEN=${{ inputs.TRELLO_TOKEN }}
+        export BOARD_ID=${{ inputs.BOARD_ID }}
+        export LIST_ID=${{ inputs.LIST_ID }}
+        export PR_NUMBER=${{ inputs.PR_NUMBER }}
+        export REPO_NAME=${{ inputs.REPO_NAME }}
+        python script.py
+      shell: bash
