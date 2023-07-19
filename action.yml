@@ -26,8 +26,12 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Checkout
+    - name: checkout automation
       uses: actions/checkout@v2
+      with:
+        repository: altooro/create-trello-card
+        path: "create-trello-card"
+        ref: development
     - name: Setup python for automation
       uses: actions/setup-python@v2
       with:
