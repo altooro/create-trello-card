@@ -20,17 +20,18 @@ if repo_name in service_labels:
 
 
 def enhance_in_trello_card(pr_text):
-    url_pattern = r'(https?://\S+)'
-    links = re.findall(url_pattern, pr_text)
-    cards = [card[:-1] for card in links if "trello.com" in card]
+    if pr_text:
+        url_pattern = r'(https?://\S+)'
+        links = re.findall(url_pattern, pr_text)
+        cards = [card[:-1] for card in links if "trello.com" in card]
 
-    for card in cards:
-        card_id = card.split("/")[-2]
-        card_labels = requests.get(f'https://api.trello.com/1/cards/{card_id}/labels',
-                                   params={'key': API_KEY, 'token': API_TOKEN}).json()
-        for label in card_labels:
-            if label["name"] == "Enhancement":
-                return True
+        for card in cards:
+            card_id = card.split("/")[-2]
+            card_labels = requests.get(f'https://api.trello.com/1/cards/{card_id}/labels',
+                                       params={'key': API_KEY, 'token': API_TOKEN}).json()
+            for label in card_labels:
+                if label["name"] == "Enhancement":
+                    return True
     return False
 
 
