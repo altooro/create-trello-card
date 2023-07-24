@@ -40,13 +40,12 @@ pr_data = requests.get(f'https://api.github.com/repos/altooro/{repo_name}/pulls/
 
 pr_name = pr_data["head"]["ref"]
 pr_description = pr_data["body"]
-is_label_exists = any(label["name"] == "enhancement" for label in pr_data["labels"])
 card_name = f"Validate {pr_name} feature in {repo_name} service. Add automation tests if needed"
 card_description = f"Validate new feature in {repo_name}\n\n**PR name:** {pr_name}\n**PR link:** " \
                    f"{pr_data['html_url']}\n\n---\n\n ### **PR description:**\n{pr_description}\n\n---\n\n" \
                    f"Done by: _{pr_data['user']['login']}_"
 
-if pr_name.lower().startswith("feature/") or is_label_exists or enhance_in_trello_card(pr_description):
+if pr_name.lower().startswith("feature/") or enhance_in_trello_card(pr_description):
     query = {
         "key": API_KEY,
         "token": API_TOKEN,
