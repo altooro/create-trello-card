@@ -32,6 +32,8 @@ def enhance_in_trello_card(pr_text):
             for label in card_labels:
                 if label["name"] == "Enhancement":
                     return True
+                if label["name"] == "Bug":
+                    return False
     return False
 
 
@@ -45,7 +47,7 @@ card_description = f"Validate new feature in {repo_name}\n\n**PR name:** {pr_nam
                    f"{pr_data['html_url']}\n\n---\n\n ### **PR description:**\n{pr_description}\n\n---\n\n" \
                    f"Done by: _{pr_data['user']['login']}_"
 
-if pr_name.lower().startswith("feature/") or enhance_in_trello_card(pr_description):
+if pr_name.lower().startswith("feature/") and enhance_in_trello_card(pr_description):
     query = {
         "key": API_KEY,
         "token": API_TOKEN,
