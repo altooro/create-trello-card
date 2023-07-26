@@ -19,7 +19,8 @@ if repo_name in service_labels:
     labels.append(service_labels[repo_name])
 
 
-def enhance_in_trello_card(pr_text):
+def bug_not_in_trello_card(pr_text):
+    create_card = True
     if pr_text:
         url_pattern = r'(https?://\S+)'
         links = re.findall(url_pattern, pr_text)
@@ -30,11 +31,10 @@ def enhance_in_trello_card(pr_text):
             card_labels = requests.get(f'https://api.trello.com/1/cards/{card_id}/labels',
                                        params={'key': API_KEY, 'token': API_TOKEN}).json()
             for label in card_labels:
-                if label["name"] == "Enhancement":
-                    return True
                 if label["name"] == "Bug":
-                    return False
-    return False
+                    create_card = False
+                    break
+    return create_card
 
 
 pr_data = requests.get(f'https://api.github.com/repos/altooro/{repo_name}/pulls/{pr_number}',
@@ -47,7 +47,7 @@ card_description = f"Validate new feature in {repo_name}\n\n**PR name:** {pr_nam
                    f"{pr_data['html_url']}\n\n---\n\n ### **PR description:**\n{pr_description}\n\n---\n\n" \
                    f"Done by: _{pr_data['user']['login']}_"
 
-if pr_name.lower().startswith("feature/") and enhance_in_trello_card(pr_description):
+if pr_name.lower().startswith("feature/") and bug_not_in_trello_card(pr_description):
     query = {
         "key": API_KEY,
         "token": API_TOKEN,
